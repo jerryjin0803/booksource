@@ -14,12 +14,26 @@ import android.widget.Toast;
 
 import java.io.File;
 
+/**
+ * 下载服务
+ */
 public class DownloadService extends Service {
 
+    /**
+     * 异步下载事务。具体的下载工作它完成的。
+     */
     private DownloadTask downloadTask;
 
+    /**
+     * 下载文件的URL
+     */
     private String downloadUrl;
 
+
+    /**
+     * 匿名实现 DownloadListener 接口，用于处理下载任务的五种状态。<br/>
+     * 按具体情况进行（移除事务、停止服务、推送通知、显示提示）
+     */
     private DownloadListener listener = new DownloadListener() {
         @Override
         public void onProgress(int progress) {
@@ -61,11 +75,22 @@ public class DownloadService extends Service {
 
     private DownloadBinder mBinder = new DownloadBinder();
 
+    /**
+     * 活动中重写 ServiceConnection 的 onServiceConnected 方法。
+     * onServiceConnected 的参数 IBinder 就这里返回的 mBinder
+     * 这样活动中就拿到了服务的控制权
+     * @param intent
+     * @return
+     */
     @Override
     public IBinder onBind(Intent intent) {
         return mBinder;
     }
 
+    /**
+     * {@link #onBind(Intent)} 会将此对象的实力传个活动类 MainActivity<br/>
+     * 这样在活动中就可以通过不同的按钮控制服务干活了。
+     */
     class DownloadBinder extends Binder {
 
         public void startDownload(String url) {
@@ -105,10 +130,20 @@ public class DownloadService extends Service {
 
     }
 
+    /**
+     * 工厂方法，返回 NotificationManager
+     * @return
+     */
     private NotificationManager getNotificationManager() {
         return (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
     }
 
+    /**
+     * 工厂方法，返回 Notification
+     * @param title 通知标题
+     * @param progress 下载进度
+     * @return
+     */
     private Notification getNotification(String title, int progress) {
         Intent intent = new Intent(this, MainActivity.class);
         PendingIntent pi = PendingIntent.getActivity(this, 0, intent, 0);
