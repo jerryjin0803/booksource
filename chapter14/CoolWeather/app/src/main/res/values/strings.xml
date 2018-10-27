@@ -1,3 +1,6 @@
 <resources>
-<string name="app_name">酷欧天气</string>
+    <string name="app_name">天气Demo</string>
+    <string name="weather_ico">天气状况图标</string>
+    <string name="degree_text">当前温度</string>
+    <string name="weather_info_text">天气风向风力</string>
 </resources>

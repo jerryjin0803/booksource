@@ -5,6 +5,8 @@ import android.text.TextUtils;
 import com.coolweather.android.db.City;
 import com.coolweather.android.db.County;
 import com.coolweather.android.db.Province;
+import com.coolweather.android.gson.Air;
+import com.coolweather.android.gson.Forecast;
 import com.coolweather.android.gson.Weather;
 import com.google.gson.Gson;
 
@@ -88,10 +90,54 @@ public class Utility {
     public static Weather handleWeatherResponse(String response) {
         try {
             JSONObject jsonObject = new JSONObject(response);
-            JSONArray jsonArray = jsonObject.getJSONArray("HeWeather");
-            String weatherContent = jsonArray.getJSONObject(0).toString();
-            return new Gson().fromJson(weatherContent, Weather.class);
+            JSONArray jsonArray = jsonObject.getJSONArray("HeWeather6");
+            String responseContent = jsonArray.getJSONObject(0).toString();
+            return new Gson().fromJson(responseContent, Weather.class);
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 将返回的JSON数据解析成Air实体类
+     */
+    public static Air handleAirResponse(String response) {
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray jsonArray = jsonObject.getJSONArray("HeWeather6");
+            String responseContent = jsonArray.getJSONObject(0).toString();
+            return new Gson().fromJson(responseContent, Air.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 获取生活指数类型{key:value}
+     */
+    public static JSONObject getLifestyleType() {
+        try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("comf","舒适度");
+            jsonObject.put("cw","洗车");
+            jsonObject.put("drsg","穿衣");
+            jsonObject.put("flu","感冒");
+            jsonObject.put("sport","运动");
+            jsonObject.put("trav","旅游");
+            jsonObject.put("uv","紫外线");
+            jsonObject.put("air","污染扩散");
+            jsonObject.put("ac","空调开启");
+            jsonObject.put("ag","过敏");
+            jsonObject.put("gl","太阳镜");
+            jsonObject.put("mu","化妆");
+            jsonObject.put("airc","晾晒");
+            jsonObject.put("ptfc","交通");
+            jsonObject.put("fsh","钓鱼");
+            jsonObject.put("spi","防晒");
+            return jsonObject;
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         return null;
